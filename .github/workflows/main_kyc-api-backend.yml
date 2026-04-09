@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read # This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -24,28 +24,27 @@ jobs:
       - name: Log in to container registry
         uses: docker/login-action@v2
         with:
-          registry: registrykycmahmoud.azurecr.io/
+          registry: registrykycmahmoud.azurecr.io
           username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_388299C5D6834FEF8392F38EE3335FBC }}
           password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_D4D47C58834E4B0996F82DABCE2ED2A2 }}
 
       - name: Build and push container image to registry
         uses: docker/build-push-action@v3
         with:
-          context: .
+          context: ./backend
           push: true
           tags: registrykycmahmoud.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_388299C5D6834FEF8392F38EE3335FBC }}/kyc-backend:${{ github.sha }}
-          file: ./Dockerfile
+          file: ./backend/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write # This is required for requesting the JWT
+      contents: read # This is required for actions/checkout
 
     needs: build
     
     steps:
-      
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -60,4 +59,3 @@ jobs:
           app-name: 'kyc-API-backend'
           slot-name: 'Production'
           images: 'registrykycmahmoud.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_388299C5D6834FEF8392F38EE3335FBC }}/kyc-backend:${{ github.sha }}'
-          
