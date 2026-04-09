@@ -1,81 +1,71 @@
-🛡️ KYC - Operations Center V3 (Cloud & Live Simulation)
-Un centre d'opérations anti-fraude complet (Know Your Customer) bâti sur une architecture microservices. Il intègre un flux de transactions en temps réel, un moteur de scoring IA et une base de données Serverless.
+🛡️ KYC - Operations Center V4 (Azure Cloud Edition)
+Un centre d'opérations anti-fraude complet (Know Your Customer) bâti sur une architecture microservices robuste. Ce projet intègre un flux de transactions en temps réel, un moteur de scoring IA et une infrastructure de données Cloud hybride.
 
 🌟 Présentation du projet
-Ce projet reproduit le système nerveux central d'une institution financière moderne. Il permet aux équipes d'investigation (Ops) de surveiller les transactions en direct, d'analyser les profils clients à 360° et d'auditer les décisions de blocage grâce à une interface fluide et un registre sécurisé.
+Ce projet reproduit le système nerveux central d'une institution financière moderne. Il permet aux équipes d'investigation (Ops) de surveiller les transactions en direct, d'analyser les profils clients à 360° et d'auditer les décisions de blocage grâce à une interface fluide et un registre sécurisé, le tout propulsé par le Cloud Microsoft Azure.
 
 🏗️ Architecture Technique (Stack)
-L'application est découpée en microservices pour garantir des performances optimales et un déploiement cloud facilité :
+L'application est découpée en microservices pour garantir des performances optimales et une scalabilité Cloud :
 
-🎨 Frontend (Dashboard) : Plotly Dash & Dash Bootstrap Components (Thème Cyborg). Interface réactive "Full Black" sans bordures.
+🎨 Frontend (Dashboard) : Plotly Dash & Dash Bootstrap Components (Thème Cyborg). Interface réactive "Full Black" optimisée pour les centres de contrôle.
 
-⚙️ Backend (API & Simulateur) : FastAPI (Python) gérant la logique métier, le scoring IA et la génération de flux de données continus.
+⚙️ Backend (API & Simulateur) : FastAPI (Python) gérant la logique métier, le scoring IA (XGBoost) et la génération de flux de données continus.
 
-🗄️ Base de données (Cloud) : PostgreSQL hébergée sur Neon.tech (Serverless), assurant une disponibilité 24/7 et supprimant le besoin de stockage local.
+🗄️ Base de données (Azure Cloud) : PostgreSQL Flexible Server hébergé sur Microsoft Azure, garantissant une haute disponibilité, une sécurité de niveau entreprise (SSL/TLS) et une persistance des données dans le Cloud.
 
-ORM : SQLAlchemy pour des requêtes sécurisées vers le Cloud.
+🔌 ORM & Connexion : SQLAlchemy avec gestion de pool de connexions (pool_pre_ping) pour une résilience maximale face aux micro-coupures réseau du Cloud.
 
-🐳 Orchestration : Docker & Docker Compose pour un déploiement "Zero-Config" en local comme en production.
+🐳 Orchestration : Docker & Docker Compose pour un environnement de développement identique à la production.
 
-🚀 Guide de Démarrage Rapide
-Déployez l'application sur votre machine en quelques minutes.
+🚀 Déploiement Cloud (Azure App Services)
+Le projet est conçu pour être déployé en tant que services conteneurisés :
 
+API Service : Hébergé sur Azure App Service (Linux).
+
+UI Service : Hébergé sur Azure App Service (Linux).
+
+Database : Instance Azure Database for PostgreSQL.
+
+💻 Guide de Démarrage (Local)
 1. Prérequis
 Docker Desktop installé et lancé.
 
-Git installé.
+Accès réseau au serveur Azure PostgreSQL (ou une instance locale).
 
 2. Installation
-Ouvrez votre terminal et clonez le dépôt :
-
 Bash
-git clone <URL_DE_VOTRE_DEPOT_GITHUB>
-cd kyc-project-cloud
-3. Sécurité et Connexion au Cloud (.env)
-Le projet se connecte à une base de données distante sécurisée. Créez un fichier .env à la racine du projet et configurez votre accès :
+git clone https://github.com/tourki23/kyc-dash-full-azure.git
+cd kyc-dash-full-azure
+3. Configuration des Variables d'Environnement (.env)
+Créez un fichier .env à la racine pour sécuriser vos accès Azure :
 
 Plaintext
-DATABASE_URL="postgresql://<USER>:<PASSWORD>@<URL_NEON>/neondb?sslmode=require"
-(Note : Le fichier .env est volontairement ignoré par Git pour des raisons de sécurité).
-
-4. Lancement de l'infrastructure
-Construisez les images Docker et lancez l'API et l'UI en arrière-plan :
-
+DATABASE_URL="postgresql://sqladmin:VOTRE_PASSWORD@kyc-db-server-mahmoud-2026.postgres.database.azure.com:5432/postgres?sslmode=require"
+API_URL="http://localhost:8000"
+4. Lancement avec Docker Compose
 Bash
 docker compose up --build -d
-5. Migration Initiale (Data Seeding)
-Au premier lancement, peuplez la base de données Cloud avec les 1000 profils clients initiaux en exécutant ce script :
+5. Migration et Initialisation (Data Seeding)
+Pour remplir votre base Azure avec les profils clients initiaux :
 
 Bash
 docker compose exec api python Seed_script_migration_data_csv_to_postedreSQL.py
-🕹️ Utilisation et Fonctionnalités
-Une fois les services lancés, ouvrez votre navigateur :
-
-📊 Dashboard KYC : http://localhost:8053
-
-⚙️ Documentation API (Swagger) : http://localhost:8000/docs
-
+🕹️ Fonctionnalités Clés
 🔥 Le Moteur de Simulation Live
-C'est le cœur interactif du projet.
+Monitoring : Visualisation en temps réel des scores de risque.
 
-Allez sur le Dashboard, onglet "📊 MONITORING LIVE".
+Interactivité : Boutons Start/Stop pilotant un sous-processus de simulation de transactions bancaires.
 
-Cliquez sur "▶️ START SIMULATION".
-
-L'API va instantanément générer un flux de nouvelles transactions (virements offshore, retraits crypto, etc.). Le moteur de scoring va les classer en temps réel (Approuvée 🟢, Surveillance 🟡, Bloquée 🔴) et animer vos graphiques en direct !
+Scoring IA : Chaque transaction est évaluée instantanément par un modèle XGBoost entraîné sur des données de fraude financière.
 
 🔍 Vision Client 360 & Audit
-Analyse Macro : Répartition des risques (Normal, Suspect, Fraudeur, PPE) et statistiques démographiques.
+Profiling : Analyse profonde des segments clients (PPE, Suspect, Normal).
 
-Ledger d'Audit : Registre immuable des décisions de l'algorithme avec hachage cryptographique pour la traçabilité de conformité.
+Traçabilité : Registre d'audit immuable avec horodatage et hachage unique pour chaque décision prise par l'IA.
 
-🛑 Arrêt des services
-Pour couper proprement l'application et stopper le réseau Docker :
+👨‍💻 Développé par
+Mahmoud TOURKI Expertise : Data Engineering, Cloud Architecture (Azure), Fullstack Python.
 
-Bash
-docker compose down
-👨‍💻 Développé par Mahmoud TOURKI
+💼 LinkedIn
 
-💼 LinkedIn : Mahmoud Tourki
-
-📧 Email : mahmoud.tourki24@gmail.com
+📧 Email
