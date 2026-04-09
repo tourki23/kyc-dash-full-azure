@@ -33,6 +33,9 @@ if API_URL.endswith('/'):
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG], suppress_callback_exceptions=True)
 
+# --- AJOUT INDISPENSABLE POUR LE DÉPLOIEMENT AZURE (GUNICORN) ---
+server = app.server 
+
 # --- CHARGEMENT DES MÉTRIQUES (ONGLET PERFORMANCE) ---
 try:
     with open("models/metrics.json", "r") as f:
