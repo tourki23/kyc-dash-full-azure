@@ -12,4 +12,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 4. On copie le reste du code
 COPY . .
 
-# Note : Pas de CMD ici, c'est le docker-compose qui pilote
+# 5. Démarrage de l'API pour Azure (Remplace le docker-compose)
+CMD ["uvicorn", "API:app", "--host", "0.0.0.0", "--port", "8000"]

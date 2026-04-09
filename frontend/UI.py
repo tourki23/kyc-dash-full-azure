@@ -24,14 +24,12 @@ C_RED = "#e74c3c"    # Blocked / Fraudeur
 DARK_PURE = "#000000"
 DARK_CARD = "#111111"
 
-# --- MODIFICATION DE L'URL API (DYNAMIQUE) ---
-# On détecte si on est dans Docker ou pas pour l'URL
-if os.path.exists("/.dockerenv"):
-    DEFAULT_URL = "http://api:8000"
-else:
-    DEFAULT_URL = "http://127.0.0.1:8000"
+# --- CONFIGURATION DE L'URL API (FORCE RENDER) ---
+API_URL = os.environ.get("API_URL", "http://127.0.0.1:8000")
 
-API_URL = os.getenv("API_URL", DEFAULT_URL)
+# Petit nettoyage au cas où il y aurait un / à la fin
+if API_URL.endswith('/'):
+    API_URL = API_URL[:-1]
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG], suppress_callback_exceptions=True)
 
@@ -232,10 +230,10 @@ def control_simulator(n_start, n_stop):
     button_id = ctx.triggered[0]["prop_id"].split(".")[0]
     try:
         if button_id == "btn-start-sim":
-            res = requests.post(f"{API_URL}/simulator/start", timeout=5)
+            res = requests.post(f"{API_URL}/simulator/start", timeout=60)
             return res.json().get("status", "Signal envoyé.")
         elif button_id == "btn-stop-sim":
-            res = requests.post(f"{API_URL}/simulator/stop", timeout=5)
+            res = requests.post(f"{API_URL}/simulator/stop", timeout=60)
             return res.json().get("status", "Arrêt envoyé.")
     except Exception as e:
         return f"❌ API Injognable sur {API_URL}"
@@ -341,6 +339,3 @@ def update_audit(n):
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8053))
     app.run(debug=False, host='0.0.0.0', port=port)
-
-
-   

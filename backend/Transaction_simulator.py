@@ -8,10 +8,13 @@ from typing import Optional
 # Import de notre base de données
 from ORM_db_traducteur_SQL import SessionLocal, Client
 
-API_URL  = os.getenv("API_URL", "http://localhost:8000")
+# --- ADAPTATION RENDER : ON UTILISE L'URL PUBLIQUE ---
+API_URL = os.getenv("API_URL", "https://kyc-operation-serveur.onrender.com")
+
+random.seed()
+
 PAYS_BAS_RISQUE  = ["France", "Allemagne", "Royaume-Uni", "Pays-Bas", "Suède"]
 PAYS_HAUT_RISQUE = ["Iran", "Corée du Nord", "Syrie", "Venezuela", "Russie"]
-random.seed()
 
 class DriftDetector:
     def __init__(self, window: int = 100, threshold_sigma: float = 2.0):
