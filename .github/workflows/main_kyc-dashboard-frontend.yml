@@ -31,10 +31,10 @@ jobs:
       - name: Build and push container image to registry
         uses: docker/build-push-action@v3
         with:
-          context: .
+          context: ./frontend
           push: true
           tags: registrykycmahmoud.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_D2F856D1ABAA4708896EE859FE12F20D }}/kyc-frontend:${{ github.sha }}
-          file: ./Dockerfile
+          file: ./frontend/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
@@ -60,4 +60,3 @@ jobs:
           app-name: 'kyc-dashboard-frontend'
           slot-name: 'Production'
           images: 'registrykycmahmoud.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_D2F856D1ABAA4708896EE859FE12F20D }}/kyc-frontend:${{ github.sha }}'
-          
