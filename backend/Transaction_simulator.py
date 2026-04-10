@@ -8,8 +8,8 @@ from typing import Optional
 # Import de notre base de données
 from ORM_db_traducteur_SQL import SessionLocal, Client
 
-# --- ADAPTATION RENDER : ON UTILISE L'URL PUBLIQUE ---
-API_URL = os.getenv("API_URL", "https://kyc-operation-serveur.onrender.com")
+# --- ADAPTATION AZURE : ON RÉCUPÈRE L'URL DEPUIS L'ENVIRONNEMENT ---
+API_URL = os.getenv("API_URL", "http://localhost:8000")
 
 random.seed()
 
